@@ -1,18 +1,37 @@
 package com.deviget.minesweeperapi.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.deviget.minesweeperapi.exception.UnknownEnumValueException;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CellStatus {
     UNCOVERED("uncovered"),
     COVERED("covered"),
     FLAGGED("flagged");
 
-    @Getter
-    @Setter
-    private String description;
+    private String value;
 
-    CellStatus(String description) {
-        this.description = description;
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
+
+    @JsonCreator
+    public static CellStatus of(String value) {
+        if (null == value || value.isEmpty()) {
+            return null;
+        }
+
+        for (CellStatus item : CellStatus.values()) {
+            if (value.equals(item.getValue())) {
+                return item;
+            }
+        }
+
+        throw new UnknownEnumValueException("CellStatus: unknown value: " + value);
+    }
+
+    CellStatus(String value) {
+        this.value = value;
     }
 }

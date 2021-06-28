@@ -2,6 +2,7 @@ package com.deviget.minesweeperapi.service;
 
 import com.deviget.minesweeperapi.model.Cell;
 import com.deviget.minesweeperapi.model.MinesweeperConfig;
+import com.deviget.minesweeperapi.vo.CellVO;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -69,5 +70,10 @@ public class MinesweeperConfigService {
             }
             System.out.println(); //Makes a new row
         }
+    }
+
+    public void updateCellStatus(CellVO cell) {
+
+        //config.getConfigArray()[cell.getRow()][cell.getColumn()].setStatus(cell.getStatus());
     }
 }
