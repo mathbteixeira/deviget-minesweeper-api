@@ -36,7 +36,7 @@ public class MinesweeperConfigService {
     @Setter
     Cell[][] configArray;
 
-    public void configureGame(GameVO gameVo) {
+    public String configureGame(GameVO gameVo) {
         Game game = new Game(gameVo.getNumOfRows(), gameVo.getNumOfColumns(), gameVo.getNumOfMines());
         //start array of game with rows and columns
         setConfigArray(new Cell[gameVo.getNumOfRows()][gameVo.getNumOfColumns()]);
@@ -46,6 +46,7 @@ public class MinesweeperConfigService {
         calculateNumbers(gameVo.getNumOfRows(), gameVo.getNumOfColumns());
         Game gameSaved = gameRepository.save(game);
         List<Cell> savedCells = saveCells(game);
+        return "Game created.";
     }
 
     private List<Cell> saveCells(Game game) {
@@ -166,6 +167,7 @@ public class MinesweeperConfigService {
         gameVo.setNumOfColumns(game.getNumOfColumns());
         gameVo.setNumOfMines(game.getNumOfMines());
         gameVo.setStatus(game.getStatus());
+        gameVo.setCells(getCells(gameId));
         return gameVo;
     }
 }

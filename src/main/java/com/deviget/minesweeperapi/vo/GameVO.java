@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,4 +34,6 @@ public class GameVO implements Serializable {
     @JsonProperty("status")
     private String status;
 
+    @JsonProperty("cells")
+    private List<CellVO> cells;
 }

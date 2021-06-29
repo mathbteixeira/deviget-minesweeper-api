@@ -5,6 +5,7 @@ import com.deviget.minesweeperapi.service.MinesweeperConfigService;
 import com.deviget.minesweeperapi.vo.CellVO;
 import com.deviget.minesweeperapi.vo.GameVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,20 +19,21 @@ public class MinesweeperApiController {
     private MinesweeperConfigService service;
 
     @PostMapping(value = "/createGame/", consumes = "application/json")
-    public void createConfig(@RequestBody GameVO game) {
-        service.configureGame(game);
+    public ResponseEntity<?> createConfig(@RequestBody GameVO game) {
+        String response = service.configureGame(game);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping(value = "/revealCell/{id}")
     public ResponseEntity<?> revealCell(@PathVariable("id") Long id) {
-        service.revealCell(id);
-        return ResponseEntity.ok().build();
+        String response = service.revealCell(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
 
     @GetMapping(value = "/flagCell/{id}")
     public ResponseEntity<?> flagCell(@PathVariable("id") Long id) {
-        service.flagCell(id);
-        return ResponseEntity.ok().build();
+        String response = service.flagCell(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
 
     @GetMapping(value = "/getCells/{gameId}")
