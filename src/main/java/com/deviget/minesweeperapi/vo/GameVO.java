@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 
 @Getter
@@ -17,12 +18,19 @@ public class GameVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("rows")
-    private Integer rows;
+    @JsonProperty("id")
+    private Long id;
 
-    @JsonProperty("columns")
-    private Integer columns;
+    @JsonProperty("numOfRows")
+    private Integer numOfRows;
 
-    @JsonProperty("mines")
-    private Integer mines;
+    @JsonProperty("numOfColumns")
+    private Integer numOfColumns;
+
+    @JsonProperty("numOfMines")
+    private Integer numOfMines;
+
+    @JsonProperty("status")
+    private String status;
+
 }

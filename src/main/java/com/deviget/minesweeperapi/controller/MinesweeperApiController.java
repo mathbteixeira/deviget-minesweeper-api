@@ -39,4 +39,9 @@ public class MinesweeperApiController {
         return service.getCells(gameId);
     }
 
+    @GetMapping(value = "/getGame/{gameId}")
+    public GameVO getGame(@PathVariable("gameId") Long gameId) {
+        return service.getGame(gameId);
+    }
+
 }

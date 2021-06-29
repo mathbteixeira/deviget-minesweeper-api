@@ -37,13 +37,13 @@ public class MinesweeperConfigService {
     Cell[][] configArray;
 
     public void configureGame(GameVO gameVo) {
-        Game game = new Game(gameVo.getRows(), gameVo.getColumns(), gameVo.getMines());
+        Game game = new Game(gameVo.getNumOfRows(), gameVo.getNumOfColumns(), gameVo.getNumOfMines());
         //start array of game with rows and columns
-        setConfigArray(new Cell[gameVo.getRows()][gameVo.getColumns()]);
+        setConfigArray(new Cell[gameVo.getNumOfRows()][gameVo.getNumOfColumns()]);
         //generate Random position of the mines
-        configureMines(gameVo.getMines(), gameVo.getRows(), gameVo.getColumns());
-        //calculate numbers
-        calculateNumbers(gameVo.getRows(), gameVo.getColumns());
+        configureMines(gameVo.getNumOfMines(), gameVo.getNumOfRows(), gameVo.getNumOfColumns());
+        //calculate numbers of each cell
+        calculateNumbers(gameVo.getNumOfRows(), gameVo.getNumOfColumns());
         Game gameSaved = gameRepository.save(game);
         List<Cell> savedCells = saveCells(game);
     }
@@ -53,7 +53,6 @@ public class MinesweeperConfigService {
         for (Cell[] cellArray : configArray) {
             Arrays.stream(cellArray).forEach(c -> {
                 c.setGame(game);
-
                 savedCells.add(cellRepository.save(c));
             });
         }
@@ -157,5 +156,16 @@ public class MinesweeperConfigService {
             cellVoList.add(cellVo);
         });
         return cellVoList;
+    }
+
+    public GameVO getGame(Long gameId) {
+        Game game = gameRepository.getById(gameId);
+        GameVO gameVo = new GameVO();
+        gameVo.setId(game.getId());
+        gameVo.setNumOfRows(game.getNumOfRows());
+        gameVo.setNumOfColumns(game.getNumOfColumns());
+        gameVo.setNumOfMines(game.getNumOfMines());
+        gameVo.setStatus(game.getStatus());
+        return gameVo;
     }
 }
