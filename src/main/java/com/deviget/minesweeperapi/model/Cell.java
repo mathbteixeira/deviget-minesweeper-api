@@ -15,10 +15,14 @@ import javax.persistence.*;
 @Table
 public class Cell {
 
+    public static final String COVERED = "covered";
+    public static final String UNCOVERED = "uncovered";
+    public static final String FLAGGED = "flagged";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int id;
+    private long id;
 
     @Column
     private int rowNum;
@@ -27,7 +31,7 @@ public class Cell {
     private int columnNum;
 
     @Column
-    private CellStatus status = CellStatus.COVERED;
+    private String status = COVERED;
 
     @Column
     // 0 = not a mine; 1 = mine;
@@ -41,12 +45,11 @@ public class Cell {
     @JoinColumn(name="game_id")
     private Game game;
 
-    public Cell(boolean isMine) {
-        this.isMine = isMine;
-    }
-
-    public Cell(int numOfAdjacentMines) {
+    public Cell(int rowNum, int columnNum, int numOfAdjacentMines, boolean isMine) {
+        this.rowNum = rowNum;
+        this.columnNum = columnNum;
         this.numOfAdjacentMines = numOfAdjacentMines;
+        this.isMine = isMine;
     }
 
 }
