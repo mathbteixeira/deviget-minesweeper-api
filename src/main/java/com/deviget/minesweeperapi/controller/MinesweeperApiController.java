@@ -27,6 +27,16 @@ public class MinesweeperApiController {
         return service.getGame(gameId);
     }
 
+    @GetMapping(value = "/pauseGame/{gameId}")
+    public GameVO pauseGame(@PathVariable("gameId") Long gameId) {
+        return service.pauseGame(gameId);
+    }
+
+    @GetMapping(value = "/resumeGame/{gameId}")
+    public GameVO resumeGame(@PathVariable("gameId") Long gameId) {
+        return service.resumeGame(gameId);
+    }
+
     @GetMapping(value = "/revealCell/{id}")
     public ResponseEntity<CellVO> revealCell(@PathVariable("id") Long id) {
         CellVO response = service.revealCell(id);

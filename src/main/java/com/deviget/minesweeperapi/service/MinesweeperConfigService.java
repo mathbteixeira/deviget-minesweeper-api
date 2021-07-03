@@ -200,6 +200,44 @@ public class MinesweeperConfigService {
         return gameVo;
     }
 
+    public GameVO pauseGame(Long gameId) {
+        Game game = gameRepository.getById(gameId);
+
+        if (!game.getStatus().equals(Game.CLOSED)) {
+            if (game.getStatus().equals(Game.OPEN)) {
+                game.setStatus(Game.PAUSED);
+                return GameConverter.convertToGameVO(gameRepository.save(game));
+            }
+            else {
+                // game already paused
+                return null;
+            }
+        }
+        else {
+            // game closed
+            return null;
+        }
+    }
+
+    public GameVO resumeGame(Long gameId) {
+        Game game = gameRepository.getById(gameId);
+
+        if (!game.getStatus().equals(Game.CLOSED)) {
+            if (game.getStatus().equals(Game.PAUSED)) {
+                game.setStatus(Game.OPEN);
+                return GameConverter.convertToGameVO(gameRepository.save(game));
+            }
+            else {
+                // game already open
+                return null;
+            }
+        }
+        else {
+            // game closed
+            return null;
+        }
+    }
+
     /* TODO: Ability to start a new game and preserve/resume the old ones
        TODO: Time tracking
        TODO: Ability to support multiple users/accounts
