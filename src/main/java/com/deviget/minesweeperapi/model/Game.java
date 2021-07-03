@@ -1,11 +1,14 @@
 package com.deviget.minesweeperapi.model;
 
+import com.deviget.minesweeperapi.converter.CellConverter;
+import com.deviget.minesweeperapi.vo.CellVO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -44,5 +47,19 @@ public class Game {
         this.numOfRows = numOfRows;
         this.numOfColumns = numOfColumns;
         this.numOfMines = numOfMines;
+    }
+
+    public List<CellVO> getCellVoList() {
+        if (this.getCells() != null && !this.getCells().isEmpty()) {
+            List<CellVO> cellVoList = new ArrayList<>();
+            this.getCells().forEach(cell -> {
+                CellVO cellVo = CellConverter.convertToCellVO(cell);
+                cellVoList.add(cellVo);
+            });
+            return cellVoList;
+        }
+        else {
+            return null;
+        }
     }
 }

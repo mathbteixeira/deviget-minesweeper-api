@@ -1,5 +1,7 @@
 package com.deviget.minesweeperapi.service;
 
+import com.deviget.minesweeperapi.converter.CellConverter;
+import com.deviget.minesweeperapi.converter.GameConverter;
 import com.deviget.minesweeperapi.model.Cell;
 import com.deviget.minesweeperapi.model.Game;
 import com.deviget.minesweeperapi.repository.CellRepository;
@@ -40,7 +42,8 @@ public class MinesweeperConfigService {
         calculateNumbers(gameVo.getNumOfRows(), gameVo.getNumOfColumns());
         Game gameSaved = gameRepository.save(game);
         List<Cell> savedCells = saveCells(game);
-        return convertToGameVO(gameSaved);
+        game.setCells(savedCells);
+        return GameConverter.convertToGameVO(gameSaved);
     }
 
     private List<Cell> saveCells(Game game) {
@@ -112,7 +115,7 @@ public class MinesweeperConfigService {
                     if (cell.getNumOfAdjacentMines() == 0) {
                         revealAdjacentCells(cell);
                     }
-                    return convertToCellVO(cell);
+                    return CellConverter.convertToCellVO(cell);
                 }
                 else {
                     return null;
@@ -156,9 +159,18 @@ public class MinesweeperConfigService {
     public String flagCell(Long id) {
         Cell cell = cellRepository.getById(id);
         if (!cell.getGame().getStatus().equals(Game.CLOSED)) {
-            cell.setStatus(Cell.FLAGGED);
-            cellRepository.save(cell);
-            return "Cell flagged.";
+            switch (cell.getStatus()) {
+                case Cell.COVERED:
+                    cell.setStatus(Cell.FLAGGED);
+                    cellRepository.save(cell);
+                    return "Cell flagged.";
+                case Cell.FLAGGED:
+                    cell.setStatus(Cell.COVERED);
+                    cellRepository.save(cell);
+                    return "Cell unflagged.";
+                default:
+                    return "This cell is already uncovered.";
+            }
         }
         else {
             return "Game " + cell.getGame().getId() + " is closed.";
@@ -176,7 +188,7 @@ public class MinesweeperConfigService {
                 cell.getGame().getId() == gameId).collect(Collectors.toList());
         List<CellVO> cellVoList = new ArrayList<>();
         cellList.forEach(cell -> {
-            CellVO cellVo = convertToCellVO(cell);
+            CellVO cellVo = CellConverter.convertToCellVO(cell);
             cellVoList.add(cellVo);
         });
         return cellVoList;
@@ -184,33 +196,9 @@ public class MinesweeperConfigService {
 
     public GameVO getGame(Long gameId) {
         Game game = gameRepository.getById(gameId);
-        GameVO gameVo = convertToGameVO(game);
+        GameVO gameVo = GameConverter.convertToGameVO(game);
         return gameVo;
     }
-
-    private CellVO convertToCellVO(Cell cell) {
-        CellVO cellVo = new CellVO();
-        cellVo.setId(cell.getId());
-        cellVo.setRowNum(cell.getRowNum());
-        cellVo.setColumnNum(cell.getColumnNum());
-        cellVo.setStatus(cell.getStatus());
-        cellVo.setMine(cell.isMine() ? "Mine" : "Not a Mine");
-        cellVo.setNumOfAdjacentMines(cell.getNumOfAdjacentMines());
-        cellVo.setGameId(cell.getGame().getId());
-        return cellVo;
-    }
-
-    private GameVO convertToGameVO(Game game) {
-        GameVO gameVo = new GameVO();
-        gameVo.setId(game.getId());
-        gameVo.setNumOfRows(game.getNumOfRows());
-        gameVo.setNumOfColumns(game.getNumOfColumns());
-        gameVo.setNumOfMines(game.getNumOfMines());
-        gameVo.setStatus(game.getStatus());
-        gameVo.setCells(getCells(game.getId()));
-        return gameVo;
-    }
-
 
     /* TODO: Ability to start a new game and preserve/resume the old ones
        TODO: Time tracking
