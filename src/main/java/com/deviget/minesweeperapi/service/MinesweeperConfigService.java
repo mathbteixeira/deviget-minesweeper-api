@@ -1,8 +1,6 @@
 package com.deviget.minesweeperapi.service;
 
 import com.deviget.minesweeperapi.model.Cell;
-//import com.deviget.minesweeperapi.model.MinesweeperConfig;
-import com.deviget.minesweeperapi.model.CellStatus;
 import com.deviget.minesweeperapi.model.Game;
 import com.deviget.minesweeperapi.repository.CellRepository;
 import com.deviget.minesweeperapi.repository.GameRepository;
@@ -17,13 +15,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 public class MinesweeperConfigService {
-
-    private static final Logger logger = Logger.getLogger("MinesweeperConfig");
 
     @Autowired
     GameRepository gameRepository;
@@ -31,12 +26,11 @@ public class MinesweeperConfigService {
     @Autowired
     CellRepository cellRepository;
 
-    //private MinesweeperConfig config;
     @Getter
     @Setter
     Cell[][] configArray;
 
-    public String configureGame(GameVO gameVo) {
+    public GameVO configureGame(GameVO gameVo) {
         Game game = new Game(gameVo.getNumOfRows(), gameVo.getNumOfColumns(), gameVo.getNumOfMines());
         //start array of game with rows and columns
         setConfigArray(new Cell[gameVo.getNumOfRows()][gameVo.getNumOfColumns()]);
@@ -46,7 +40,7 @@ public class MinesweeperConfigService {
         calculateNumbers(gameVo.getNumOfRows(), gameVo.getNumOfColumns());
         Game gameSaved = gameRepository.save(game);
         List<Cell> savedCells = saveCells(game);
-        return "Game created.";
+        return convertToGameVO(gameSaved);
     }
 
     private List<Cell> saveCells(Game game) {
@@ -107,20 +101,56 @@ public class MinesweeperConfigService {
         }
     }
 
-    public String revealCell(Long id) {
+    public CellVO revealCell(Long id) {
         Cell cell = cellRepository.getById(id);
         if (!cell.getGame().getStatus().equals(Game.CLOSED)) {
             if (cell.isMine()) {
                 return endGame(cell.getGame());
             } else {
-                cell.setStatus(Cell.UNCOVERED);
-                cellRepository.save(cell);
-                return "Cell uncovered.";
+                if (!cell.getStatus().equals(Cell.UNCOVERED)) {
+                    cell = uncoverCell(cell);
+                    if (cell.getNumOfAdjacentMines() == 0) {
+                        revealAdjacentCells(cell);
+                    }
+                    return convertToCellVO(cell);
+                }
+                else {
+                    return null;
+                }
             }
         }
         else {
-            return "Game " + cell.getGame().getId() + " is closed.";
+            return null;
         }
+    }
+
+    private void revealAdjacentCells(Cell cell) {
+        List<Cell> cellsWithNoAdjacentMines = new ArrayList<>();
+        for (int row = cell.getRowNum() - 1; row <= cell.getRowNum() + 1; row++) {
+            for (int col = cell.getColumnNum() - 1; col <= cell.getColumnNum() + 1; col++) {
+                if ((col >= 0 && col < cell.getGame().getNumOfColumns())
+                        && (row >= 0 && row < cell.getGame().getNumOfRows())
+                        && !(row == cell.getRowNum() && col == cell.getColumnNum())) {
+                    Cell adjacentCell = cellRepository.findByGameIdAndRowAndColumn(cell.getGame().getId(), row, col);
+                    if (!adjacentCell.isMine() && !adjacentCell.getStatus().equals(Cell.UNCOVERED)) {
+                        adjacentCell = uncoverCell(adjacentCell);
+                        if (adjacentCell.getNumOfAdjacentMines() == 0) {
+                            cellsWithNoAdjacentMines.add(adjacentCell);
+                        }
+                    }
+                }
+            }
+        }
+        if (!cellsWithNoAdjacentMines.isEmpty()) {
+            for (Cell c : cellsWithNoAdjacentMines) {
+                revealAdjacentCells(c);
+            }
+        }
+    }
+
+    private Cell uncoverCell(Cell cell) {
+        cell.setStatus(Cell.UNCOVERED);
+        return cellRepository.save(cell);
     }
 
     public String flagCell(Long id) {
@@ -135,10 +165,10 @@ public class MinesweeperConfigService {
         }
     }
 
-    private String endGame(Game game) {
+    private CellVO endGame(Game game) {
         game.setStatus(Game.CLOSED);
         gameRepository.save(game);
-        return "Boom! You hit a bomb!";
+        return null;
     }
 
     public List<CellVO> getCells(Long gameId) {
@@ -146,14 +176,7 @@ public class MinesweeperConfigService {
                 cell.getGame().getId() == gameId).collect(Collectors.toList());
         List<CellVO> cellVoList = new ArrayList<>();
         cellList.forEach(cell -> {
-            CellVO cellVo = new CellVO();
-            cellVo.setId(cell.getId());
-            cellVo.setRowNum(cell.getRowNum());
-            cellVo.setColumnNum(cell.getColumnNum());
-            cellVo.setStatus(cell.getStatus());
-            cellVo.setMine(cell.isMine() ? "Mine" : "Not a Mine");
-            cellVo.setNumOfAdjacentMines(cell.getNumOfAdjacentMines());
-            cellVo.setGameId(cell.getGame().getId());
+            CellVO cellVo = convertToCellVO(cell);
             cellVoList.add(cellVo);
         });
         return cellVoList;
@@ -161,13 +184,38 @@ public class MinesweeperConfigService {
 
     public GameVO getGame(Long gameId) {
         Game game = gameRepository.getById(gameId);
+        GameVO gameVo = convertToGameVO(game);
+        return gameVo;
+    }
+
+    private CellVO convertToCellVO(Cell cell) {
+        CellVO cellVo = new CellVO();
+        cellVo.setId(cell.getId());
+        cellVo.setRowNum(cell.getRowNum());
+        cellVo.setColumnNum(cell.getColumnNum());
+        cellVo.setStatus(cell.getStatus());
+        cellVo.setMine(cell.isMine() ? "Mine" : "Not a Mine");
+        cellVo.setNumOfAdjacentMines(cell.getNumOfAdjacentMines());
+        cellVo.setGameId(cell.getGame().getId());
+        return cellVo;
+    }
+
+    private GameVO convertToGameVO(Game game) {
         GameVO gameVo = new GameVO();
         gameVo.setId(game.getId());
         gameVo.setNumOfRows(game.getNumOfRows());
         gameVo.setNumOfColumns(game.getNumOfColumns());
         gameVo.setNumOfMines(game.getNumOfMines());
         gameVo.setStatus(game.getStatus());
-        gameVo.setCells(getCells(gameId));
+        gameVo.setCells(getCells(game.getId()));
         return gameVo;
     }
+
+
+    /* TODO: Ability to start a new game and preserve/resume the old ones
+       TODO: Time tracking
+       TODO: Ability to support multiple users/accounts
+
+       TODO: change revealCell method to return GameVO object
+     */
 }

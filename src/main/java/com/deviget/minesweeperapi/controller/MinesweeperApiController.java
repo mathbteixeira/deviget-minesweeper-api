@@ -1,6 +1,5 @@
 package com.deviget.minesweeperapi.controller;
 
-import com.deviget.minesweeperapi.model.Cell;
 import com.deviget.minesweeperapi.service.MinesweeperConfigService;
 import com.deviget.minesweeperapi.vo.CellVO;
 import com.deviget.minesweeperapi.vo.GameVO;
@@ -19,14 +18,18 @@ public class MinesweeperApiController {
     private MinesweeperConfigService service;
 
     @PostMapping(value = "/createGame/", consumes = "application/json")
-    public ResponseEntity<?> createConfig(@RequestBody GameVO game) {
-        String response = service.configureGame(game);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public GameVO createConfig(@RequestBody GameVO game) {
+        return service.configureGame(game);
+    }
+
+    @GetMapping(value = "/getGame/{gameId}")
+    public GameVO getGame(@PathVariable("gameId") Long gameId) {
+        return service.getGame(gameId);
     }
 
     @GetMapping(value = "/revealCell/{id}")
-    public ResponseEntity<?> revealCell(@PathVariable("id") Long id) {
-        String response = service.revealCell(id);
+    public ResponseEntity<CellVO> revealCell(@PathVariable("id") Long id) {
+        CellVO response = service.revealCell(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
 
@@ -39,11 +42,6 @@ public class MinesweeperApiController {
     @GetMapping(value = "/getCells/{gameId}")
     public List<CellVO> getCells(@PathVariable("gameId") Long gameId) {
         return service.getCells(gameId);
-    }
-
-    @GetMapping(value = "/getGame/{gameId}")
-    public GameVO getGame(@PathVariable("gameId") Long gameId) {
-        return service.getGame(gameId);
     }
 
 }
