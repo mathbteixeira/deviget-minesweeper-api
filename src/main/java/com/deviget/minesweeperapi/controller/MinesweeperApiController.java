@@ -1,8 +1,10 @@
 package com.deviget.minesweeperapi.controller;
 
-import com.deviget.minesweeperapi.service.MinesweeperConfigService;
+import com.deviget.minesweeperapi.service.CellService;
+import com.deviget.minesweeperapi.service.GameService;
 import com.deviget.minesweeperapi.vo.CellVO;
 import com.deviget.minesweeperapi.vo.GameVO;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,43 +17,86 @@ import java.util.List;
 public class MinesweeperApiController {
 
     @Autowired
-    private MinesweeperConfigService service;
+    private GameService gameService;
 
-    @PostMapping(value = "/createGame/", consumes = "application/json")
-    public GameVO createConfig(@RequestBody GameVO game) {
-        return service.configureGame(game);
+    @Autowired
+    private CellService cellService;
+
+    @PostMapping(value = "/game/", consumes = "application/json")
+    public ResponseEntity<GameVO> createGame(@RequestBody @NotNull GameVO game) {
+        try {
+            GameVO response = gameService.createGame(game);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
-    @GetMapping(value = "/getGame/{gameId}")
-    public GameVO getGame(@PathVariable("gameId") Long gameId) {
-        return service.getGame(gameId);
+    @GetMapping(value = "/game/{gameId}")
+    public ResponseEntity<GameVO> getGame(@PathVariable("gameId") Long gameId) {
+        GameVO response = gameService.getGame(gameId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
-    @GetMapping(value = "/pauseGame/{gameId}")
-    public GameVO pauseGame(@PathVariable("gameId") Long gameId) {
-        return service.pauseGame(gameId);
+    @GetMapping(value = "/game/pause/{gameId}")
+    public ResponseEntity<GameVO> pauseGame(@PathVariable("gameId") Long gameId) {
+        GameVO response = gameService.pauseGame(gameId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
-    @GetMapping(value = "/resumeGame/{gameId}")
-    public GameVO resumeGame(@PathVariable("gameId") Long gameId) {
-        return service.resumeGame(gameId);
+    @GetMapping(value = "/game/resume/{gameId}")
+    public ResponseEntity<GameVO> resumeGame(@PathVariable("gameId") Long gameId) {
+        GameVO response = gameService.resumeGame(gameId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
-    @GetMapping(value = "/revealCell/{id}")
-    public ResponseEntity<CellVO> revealCell(@PathVariable("id") Long id) {
-        CellVO response = service.revealCell(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+    @GetMapping(value = "/game/cells/{gameId}")
+    public ResponseEntity<List<CellVO>> getCells(@PathVariable("gameId") Long gameId) {
+        List<CellVO> response = cellService.getCells(gameId);
+        if (response == null || response.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
-    @GetMapping(value = "/flagCell/{id}")
-    public ResponseEntity<?> flagCell(@PathVariable("id") Long id) {
-        String response = service.flagCell(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+    @GetMapping(value = "/cell/reveal/{cellId}")
+    public ResponseEntity<GameVO> revealCell(@PathVariable("cellId") Long cellId) {
+        GameVO response = cellService.revealCell(cellId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
-    @GetMapping(value = "/getCells/{gameId}")
-    public List<CellVO> getCells(@PathVariable("gameId") Long gameId) {
-        return service.getCells(gameId);
+    @GetMapping(value = "/cell/flag/{cellId}")
+    public ResponseEntity<CellVO> flagCell(@PathVariable("cellId") Long cellId) {
+        CellVO response = cellService.flagCell(cellId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
 }
