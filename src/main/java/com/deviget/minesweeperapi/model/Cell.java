@@ -34,11 +34,9 @@ public class Cell {
     private String status = COVERED;
 
     @Column
-    // 0 = not a mine; 1 = mine;
     private boolean isMine = false;
 
     @Column
-    // could be from 0 to 8
     private int numOfAdjacentMines = 0;
 
     @ManyToOne

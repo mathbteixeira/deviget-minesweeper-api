@@ -4,7 +4,6 @@ import com.deviget.minesweeperapi.converter.GameConverter;
 import com.deviget.minesweeperapi.model.Cell;
 import com.deviget.minesweeperapi.model.Game;
 import com.deviget.minesweeperapi.repository.GameRepository;
-import com.deviget.minesweeperapi.vo.CellVO;
 import com.deviget.minesweeperapi.vo.GameVO;
 import lombok.Getter;
 import lombok.Setter;
@@ -106,8 +105,7 @@ public class GameService {
 
     public GameVO getGame(Long gameId) {
         Game game = gameRepository.getById(gameId);
-        GameVO gameVo = GameConverter.convertToGameVO(game);
-        return gameVo;
+        return GameConverter.convertToGameVO(game);
     }
 
     public GameVO pauseGame(Long gameId) {

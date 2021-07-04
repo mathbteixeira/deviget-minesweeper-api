@@ -28,10 +28,10 @@ public class CellVO implements Serializable {
     @JsonProperty("status")
     private String status;
 
-    @JsonProperty("mine")
+    @JsonProperty("isMine")
     private String mine;
 
-    @JsonProperty("isMine")
+    @JsonProperty("numOfAdjacentMines")
     private Integer numOfAdjacentMines;
 
     @JsonProperty("gameId")
