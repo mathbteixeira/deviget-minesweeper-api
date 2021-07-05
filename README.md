@@ -1,4 +1,5 @@
-# MineSweeper-API </br> Deviget
+# MineSweeper-API 
+## Deviget
 #### This project was developed as a part of the hiring process for the role of "Senior Java Developer"
 
 ## Dependencies
@@ -16,7 +17,7 @@
 - [x] Ability to start a new game and preserve/resume the old ones
 - [x] Ability to select the game parameters: number of rows, columns, and mines
 - [x] Add good documentation
-= [ ] Add tests
+- [ ] Add tests
 - [ ] Time tracking
 - [ ] Ability to support multiple users/accounts
 
@@ -25,7 +26,8 @@
 * ##### This endpoint is responsible for configuring a new game and saving the game and cells to the database. </br>
 * If the parameters are invalid, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
 * If the game creation is successful, should return an *HTTP status 201 - CREATED* and the Game object in the body of the response.
-####Sample payload:
+
+#### Sample payload:
 ```json
 {
     "numOfRows": 5,
