@@ -2,6 +2,21 @@
 ## Deviget
 #### This project was developed as a part of the hiring process for the role of "Senior Java Developer"
 
+## Table of Contents
+<!--ts-->
+* [Table of Contents](#table-of-contents)
+* [Dependencies](#dependencies)
+* [Features](#features)
+* [API Endpoints](#api-endpoints)
+    * [POST - "/api/minesweeper/game/"](#post---apiminesweepergame)
+    * [GET - "/api/minesweeper/game/{gameId}/"](#get---apiminesweepergamegameid)
+    * [GET - "/api/minesweeper/game/cells/{gameId}/"](#get---apiminesweepergamecellsgameid)
+    * [GET - "/api/minesweeper/game/pause/{gameId}/"](#get---apiminesweepergamepausegameid)
+    * [GET - "/api/minesweeper/game/resume/{gameId}/"](#get---apiminesweepergameresumegameid)
+    * [GET - "/api/minesweeper/cell/reveal/{cellId}/"](#get---apiminesweepercellrevealcellid)
+    * [GET - "/api/minesweeper/cell/flag/{cellId}/"](#get---apiminesweepercellflagcellid)
+<!--te-->
+
 ## Dependencies
 * #### Lombok
 * #### JPA
