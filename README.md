@@ -51,15 +51,24 @@
 }
 ```
 
+#### Endpoint URL
+This endpoint API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/api/minesweeper/game/)
+
 ### GET - "/api/minesweeper/game/{gameId}/"
 * This endpoint is responsible for returning a game by its id. </br>
 * If the Game was not found, should return an *HTTP status 404 - NOT FOUND* and null in the body of the response. </br>
 * If the Game is found, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
 
+#### Endpoint URL
+This endpoint API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/api/minesweeper/game/{gameId}/)
+
 ### GET - "/api/minesweeper/game/cells/{gameId}/"
 * This endpoint is responsible for returning all the cells of a game by the game id. </br>
 * If the Game was not found, should return an *HTTP status 404 - NOT FOUND* and null in the body of the response. </br>
 * If the Game is found, should return an *HTTP status 200 - OK* and a list of the cell objects in the body of the response.
+
+#### Endpoint URL
+This endpoint API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/api/minesweeper/game/cells/{gameId}/)
 
 ### GET - "/api/minesweeper/game/pause/{gameId}/"
 * This endpoint is responsible for pausing a game, updating the status of the Game to "paused". </br>
@@ -67,11 +76,17 @@
 * If the Game was already paused, should return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
 * If the Game was successfuly paused, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
 
+#### Endpoint URL
+This endpoint API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/api/minesweeper/game/pause/{gameId}/)
+
 ### GET - "/api/minesweeper/game/resume/{gameId}/"
 * This endpoint is responsible for resuming a game, updating the status of the Game to "open". </br>
 * If the Game status is closed, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
 * If the Game was already open, should return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
 * If the Game was successfuly resumed, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
+
+#### Endpoint URL
+This endpoint API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/api/minesweeper/game/resume/{gameId}/)
 
 ### GET - "/api/minesweeper/cell/reveal/{cellId}/"
 * This endpoint is responsible for revealing a Cell by its id, updating the status of the Cell. </br>
@@ -80,6 +95,9 @@
 * If the Cell was covered (or flagged), should reveal the Cell (and all of the adjacent cells - if the "numOfAdjacentMines" is 0) and return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
 * If the Cell was already uncovered, should return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
 
+#### Endpoint URL
+This endpoint API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/api/minesweeper/cell/reveal/{cellId}/)
+
 ### GET - "/api/minesweeper/cell/flag/{cellId}/"
 * This endpoint is responsible for flagging a Cell by its id, updating the status of the Cell. </br>
 * If the Cell's Game status is closed, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
@@ -87,5 +105,5 @@
 * If the Cell is flagged, should unflag the Cell and return an *HTTP status 200 - OK* and the Cell object in the body of the response. </br>
 * If the Cell is uncovered, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
 
-## API URL
-The API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/)
+#### Endpoint URL
+This endpoint API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/api/minesweeper/cell/flag/{cellId}/)
