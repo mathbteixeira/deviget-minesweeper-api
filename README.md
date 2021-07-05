@@ -7,6 +7,7 @@
 * #### H2 Database
 
 ## Features
+- [x] Use Java as the main language
 - [x] Design and implement a documented RESTful API for the game (think of a mobile app for your API)
 - [x] When a cell with no adjacent mines is revealed, all adjacent squares will be revealed (and repeat)
 - [x] Ability to 'flag' a cell with a question mark or red flag
@@ -14,6 +15,8 @@
 - [x] Persistence
 - [x] Ability to start a new game and preserve/resume the old ones
 - [x] Ability to select the game parameters: number of rows, columns, and mines
+- [x] Add good documentation
+= [ ] Add tests
 - [ ] Time tracking
 - [ ] Ability to support multiple users/accounts
 
