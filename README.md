@@ -40,7 +40,7 @@
 ### POST - "/api/minesweeper/game/"
 * This endpoint is responsible for configuring a new game and saving the game and cells to the database. </br>
 * If the parameters are invalid, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
-* If the game creation is successful, should return an *HTTP status 201 - CREATED* and the Game object in the body of the response.
+* If the Game creation is successful, should return an *HTTP status 201 - CREATED* and the Game object in the body of the response.
 
 #### Sample payload:
 ```json
@@ -53,25 +53,25 @@
 
 ### GET - "/api/minesweeper/game/{gameId}/"
 * This endpoint is responsible for returning a game by its id. </br>
-* If the game was not found, should return an *HTTP status 404 - NOT FOUND* and null in the body of the response. </br>
-* If the game is found, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
+* If the Game was not found, should return an *HTTP status 404 - NOT FOUND* and null in the body of the response. </br>
+* If the Game is found, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
 
 ### GET - "/api/minesweeper/game/cells/{gameId}/"
 * This endpoint is responsible for returning all the cells of a game by the game id. </br>
-* If the game was not found, should return an *HTTP status 404 - NOT FOUND* and null in the body of the response. </br>
-* If the game is found, should return an *HTTP status 200 - OK* and a list of the cell objects in the body of the response.
+* If the Game was not found, should return an *HTTP status 404 - NOT FOUND* and null in the body of the response. </br>
+* If the Game is found, should return an *HTTP status 200 - OK* and a list of the cell objects in the body of the response.
 
 ### GET - "/api/minesweeper/game/pause/{gameId}/"
 * This endpoint is responsible for pausing a game, updating the status of the Game to "paused". </br>
-* If the game status is closed, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
-* If the game was already paused, should return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
-* If the game was successfuly paused, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
+* If the Game status is closed, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
+* If the Game was already paused, should return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
+* If the Game was successfuly paused, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
 
 ### GET - "/api/minesweeper/game/resume/{gameId}/"
 * This endpoint is responsible for resuming a game, updating the status of the Game to "open". </br>
-* If the game status is closed, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
-* If the game was already open, should return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
-* If the game was successfuly resumed, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
+* If the Game status is closed, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
+* If the Game was already open, should return an *HTTP status 200 - OK* and the Game object in the body of the response. </br>
+* If the Game was successfuly resumed, should return an *HTTP status 200 - OK* and the Game object in the body of the response.
 
 ### GET - "/api/minesweeper/cell/reveal/{cellId}/"
 * This endpoint is responsible for revealing a Cell by its id, updating the status of the Cell. </br>
