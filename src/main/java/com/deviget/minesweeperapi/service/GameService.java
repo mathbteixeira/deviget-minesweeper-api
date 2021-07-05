@@ -141,11 +141,4 @@ public class GameService {
                 return null;
         }
     }
-
-    /* TODO: Time tracking
-       TODO: Ability to support multiple users/accounts
-
-       TODO: change revealCell method to return GameVO object
-       TODO: add validation for game paused
-     */
 }

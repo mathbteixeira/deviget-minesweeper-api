@@ -32,8 +32,8 @@ public class CellService {
                 return GameConverter.convertToGameVO(endedGame);
             }
             else {
+                Long gameId = cell.getGame().getId();
                 if (!cell.getStatus().equals(Cell.UNCOVERED)) {
-                    Long gameId = cell.getGame().getId();
                     cell = uncoverCell(cell);
                     if (cell != null && cell.getNumOfAdjacentMines() == 0) {
                         revealAdjacentCells(cell);
@@ -41,7 +41,7 @@ public class CellService {
                     return gameService.getGame(gameId);
                 } else {
                     // cell uncovered
-                    return null;
+                    return gameService.getGame(gameId);
                 }
             }
         } else {
