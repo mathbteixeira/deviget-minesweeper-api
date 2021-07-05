@@ -86,3 +86,6 @@
 * If the Cell is covered, should flag the Cell and return an *HTTP status 200 - OK* and the Cell object in the body of the response. </br>
 * If the Cell is flagged, should unflag the Cell and return an *HTTP status 200 - OK* and the Cell object in the body of the response. </br>
 * If the Cell is uncovered, should return an *HTTP status 400 - BAD REQUEST* and null in the body of the response. </br>
+
+## API URL
+The API is available at [this link](https://minesweeperapi-deviget.herokuapp.com/)
